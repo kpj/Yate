@@ -11,13 +11,19 @@ class JavascriptInterface(QtCore.QObject):
 		"""
 		print(msg)
 
-	@QtCore.pyqtSlot()
-	def open_file(self):
+	@QtCore.pyqtSlot(str, result=str)
+	def read_file(self, fname):
 		"""Asks for file and returns its content
-		   NOTE: does not work
 		"""
-		fname = QtGui.QFileDialog.getOpenFileName(None, 'Open File', '.')
+
 		return open(fname, 'r').read()
+
+	@QtCore.pyqtSlot(str, result=str)
+	def show_open_file_dialog(self, title):
+		"""Asks for file and returns its content
+		"""
+		fname = QtGui.QFileDialog.getOpenFileName(None, title, '.')
+		return fname
 
 	@QtCore.pyqtSlot(str, str)
 	def save_file(self, fname, content):

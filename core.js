@@ -23,6 +23,8 @@ $(document).ready(function() {
 	.click(function() {
 		PyInterface.log('Opening file');
 
-		var content = PyInterface.open_file();
+		var filename = PyInterface.show_open_file_dialog("Open file");
+		var content = PyInterface.read_file(filename); 
+		$('#text').val(content); 
 	})
 });
