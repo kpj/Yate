@@ -32,6 +32,13 @@ class Viewer(QtWebKit.QWebView):
 
 		# more to come
 
+	def keyPressEvent(self, e):
+		self.page().mainFrame().evaluateJavaScript(
+			'handle_key(' + 
+			str(e.key()) +
+			')'
+		);
+
 def main():
 	app = QtGui.QApplication(sys.argv)
 

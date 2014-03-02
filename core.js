@@ -1,4 +1,15 @@
+function handle_key(key) {
+	/*
+	* Handles incoming keys
+	*/
+	PyInterface.log('Got key: ' + key)
+}
+
 $(document).ready(function() {
+	/*
+	* Setup view
+	*/
+
 	// init buttons
 	$('#save')
 	.click(function() {
