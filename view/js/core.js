@@ -1,10 +1,3 @@
-function handle_key(key) {
-	/*
-	* Handles incoming keys
-	*/
-	PyInterface.log('Got key: ' + key)
-}
-
 $(document).ready(function() {
 	/*
 	* Setup view
@@ -29,7 +22,6 @@ $(document).ready(function() {
 	}); 
 
 	Events.on("keypress", function(e){
-		//do keypress stuffs here
-		//alert(e); 
+		// do keypress stuffs here
 	})
 });

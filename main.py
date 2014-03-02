@@ -8,7 +8,7 @@ class JavascriptInterface(QtCore.QObject):
 	"""
 	@QtCore.pyqtSlot(str)
 	def log(self, msg):
-		"""Easy logging for javascript (prints to normal terminal)
+		"""Easy logging for javascript (prints to terminal)
 		"""
 		print(msg)
 
@@ -37,12 +37,11 @@ class Viewer(QtWebKit.QWebView):
 	def __init__(self):
 		QtWebKit.QWebView.__init__(self)
 
-		# more to come
 	def evtHandler(self, key, args):
 		args = json.dumps(args)
 		key = json.dumps(key)
 
-		print "Events.__pyTrigger("+key+", "+args+")"
+		print("Events.__pyTrigger("+key+", "+args+")")
 		self.page().mainFrame().evaluateJavaScript(
 			"Events.__pyTrigger("+key+", "+args+")"
 		)
