@@ -1,4 +1,5 @@
 import sys
+import json
 from PyQt4 import QtCore, QtGui, QtWebKit
 
 
@@ -13,14 +14,14 @@ class JavascriptInterface(QtCore.QObject):
 
 	@QtCore.pyqtSlot(str, result=str)
 	def read_file(self, fname):
-		"""Asks for file and returns its content
+		"""Reads file content
 		"""
 
 		return open(fname, 'r').read()
 
 	@QtCore.pyqtSlot(str, result=str)
 	def show_open_file_dialog(self, title):
-		"""Asks for file and returns its content
+		"""Asks for file and returns file name
 		"""
 		fname = QtGui.QFileDialog.getOpenFileName(None, title, '.')
 		return fname
@@ -37,13 +38,19 @@ class Viewer(QtWebKit.QWebView):
 		QtWebKit.QWebView.__init__(self)
 
 		# more to come
+	def evtHandler(self, key, args):
+		args = json.dumps(args)
+		key = json.dumps(key)
+
+		print "Events.__pyTrigger("+key+", "+args+")"
+		self.page().mainFrame().evaluateJavaScript(
+			"Events.__pyTrigger("+key+", "+args+")"
+		)
 
 	def keyPressEvent(self, e):
-		self.page().mainFrame().evaluateJavaScript(
-			'handle_key(' + 
-			str(e.key()) +
-			')'
-		);
+		self.evtHandler("keypress", [str(e.key())])
+
+		QtWebKit.QWebView.keyPressEvent(self, e)
 
 def main():
 	app = QtGui.QApplication(sys.argv)
@@ -54,7 +61,7 @@ def main():
 	# create main window
 	view = Viewer()
 	view.page().mainFrame().addToJavaScriptWindowObject("PyInterface", js_interface)
-	view.load(QtCore.QUrl('./view.html'))
+	view.load(QtCore.QUrl('./view/index.html'))
 	view.show()
 
 	sys.exit(app.exec_())
