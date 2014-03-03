@@ -44,7 +44,8 @@ class Viewer(QtWebKit.QWebView):
 		self.show()
 
 	def javaScriptWindowObjectCleared(self):
-		self.page().mainFrame().addToJavaScriptWindowObject(
-			"PyInterface",
-			python.js_interface.JavascriptInterface()
-		)
+		#self.page().mainFrame().addToJavaScriptWindowObject(
+		#	"PyInterface",
+		#	python.js_interface.JavascriptInterface()
+		#)
+		pass

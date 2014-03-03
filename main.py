@@ -10,6 +10,10 @@ def main():
 	# create main window
 	view = python.gui.Viewer()
 
+	# TODO: remove this line
+	jsi = python.js_interface.JavascriptInterface()
+	view.page().mainFrame().addToJavaScriptWindowObject("PyInterface",jsi)
+
 	sys.exit(app.exec_())
 
 if __name__ == '__main__':
