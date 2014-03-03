@@ -29,5 +29,4 @@ class JavascriptInterface(QtCore.QObject):
 		"""Saves given content to specified file
 		"""
 		with open(fname, 'w') as fd:
-			print("saving...")
 			fd.write(content)
