@@ -35,11 +35,15 @@ class Viewer(QtWebKit.QWebView):
 
 		QtWebKit.QWebView.keyPressEvent(self, e)
 
+	def keyReleaseEvent(self, e):
+		self.evtHandler("keyrelease", [str(e.key())])
+
+		QtWebKit.QWebView.keyReleaseEvent(self, e)
+
 	def loadFinished(self, ok):
 		self.show()
 
 	def javaScriptWindowObjectCleared(self):
-		print("Added object to js")
 		self.page().mainFrame().addToJavaScriptWindowObject(
 			"PyInterface",
 			python.js_interface.JavascriptInterface()
