@@ -1,4 +1,5 @@
 var editor = undefined;
+var openedFileName = undefined; // make this a list of objects
 
 function KeyHandler() {
 	var me = this;
@@ -41,17 +42,14 @@ $(document).ready(function() {
 
 	var keyHandler = new KeyHandler();
 
-	// init buttons
-	$('#save')
-	.click(function() {
-		var fname = $('#filename').val();
-
-		PyInterface.log('Saving file to ' + fname);
-
-		PyInterface.save_file(fname, editor.getValue());
-	})
-	$('#open')
-	.click(function() {
+	// handle events
+	Events.on("keypress", function(e) {
+		keyHandler.checkKey('press', e);
+	});
+	Events.on("keyrelease", function(e) {
+		keyHandler.checkKey('release', e);
+	});
+	Events.on("openFile", function(e) {
 		PyInterface.log('Opening file');
 
 		// load file
@@ -66,15 +64,12 @@ $(document).ready(function() {
 		// set content
 		editor.setValue(content);
 
-		$('#filename').val(filename);
-	}); 
-
-	// handle events
-	Events.on("keypress", function(e) {
-		keyHandler.checkKey('press', e);
+		openedFileName = filename;
 	});
-	Events.on("keyrelease", function(e) {
-		keyHandler.checkKey('release', e);
+	Events.on("saveFile", function(e) {
+		PyInterface.log('Saving file to ' + openedFileName);
+
+		PyInterface.save_file(openedFileName, editor.getValue());
 	});
 
 	// enable editor

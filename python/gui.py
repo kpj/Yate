@@ -1,8 +1,57 @@
 import json
-from PyQt4 import QtWebKit, QtCore
+from PyQt4 import QtWebKit, QtCore, QtGui
 
 import python.js_interface
 
+
+class MainWindow(QtGui.QMainWindow):
+	def __init__(self, view):
+		super(MainWindow, self).__init__()
+
+		self.view = view
+
+		self.setCentralWidget(view)
+		self.initUI()
+
+	def initUI(self):               
+		self.statusBar()
+
+		menubar = self.menuBar()
+		fileMenu = menubar.addMenu('&File')
+		for a in self.getFileMenu():
+			fileMenu.addAction(a)
+		
+		self.setWindowTitle('Yate')    
+		self.show()
+
+	def openFileAction(self):
+		self.view.evtHandler('openFile', [])
+
+	def saveFileAction(self):
+		self.view.evtHandler('saveFile', [])
+
+	def getFileMenu(self):
+		actions = []
+
+		openFileAction = QtGui.QAction('&Open File', self)        
+		openFileAction.setShortcut('Ctrl+O')
+		openFileAction.setStatusTip('Open new file')
+		openFileAction.triggered.connect(self.openFileAction)
+		actions.append(openFileAction)
+
+		saveFileAction = QtGui.QAction('&Save', self)        
+		saveFileAction.setShortcut('Ctrl+S')
+		saveFileAction.setStatusTip('Save current file')
+		saveFileAction.triggered.connect(self.saveFileAction)
+		actions.append(saveFileAction)
+
+		exitAction = QtGui.QAction('&Exit', self)        
+		exitAction.setShortcut('Ctrl+Q')
+		exitAction.setStatusTip('Exit application')
+		exitAction.triggered.connect(QtGui.qApp.quit)
+		actions.append(exitAction)
+
+		return actions
 
 class Viewer(QtWebKit.QWebView):
 	def __init__(self):

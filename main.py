@@ -14,6 +14,8 @@ def main():
 	jsi = python.js_interface.JavascriptInterface()
 	view.page().mainFrame().addToJavaScriptWindowObject("PyInterface",jsi)
 
+	main_window = python.gui.MainWindow(view)
+
 	sys.exit(app.exec_())
 
 if __name__ == '__main__':
