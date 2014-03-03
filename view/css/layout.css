@@ -16,3 +16,17 @@ body {
 	font-size: 15px;
 	font-family: "DejaVu Sans Mono";
 }
+
+::-webkit-scrollbar {
+	width: 6px;
+}
+ 
+::-webkit-scrollbar-track {
+	border-radius: 8px;
+	background: rgba(70, 70, 70, 0.2);
+}
+ 
+::-webkit-scrollbar-thumb {
+	border-radius: 8px;
+	background: rgba(255, 255, 255, 0.5); 
+}
