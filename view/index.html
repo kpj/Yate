@@ -5,14 +5,23 @@
 
 	<title>View</title>
 
+	<!-- own layout -->
+	<link href="./css/layout.css" rel="stylesheet" />
+
+	<!-- syntax highlighting -->
+	<script type="text/javascript" src="./libs/ace/ace.js" charset="utf-8"></script>
+	<script src="./libs/ace/ext-modelist.js" type="text/javascript" charset="utf-8"></script>
+
+	<!-- eternal utilities -->
 	<script type="text/javascript" src="./libs/jquery/jquery-2.1.0.min.js"></script>
 	<script type="text/javascript" src="./libs/EventEmitter/EventEmitter.js"></script>
 
+	<!-- own scripts -->
 	<script type="text/javascript" src="./js/events.js"></script>
 	<script type="text/javascript" src="./js/core.js"></script>
 </head>
 <body>
-	<textarea id="text" rows="20" cols="40"></textarea><br />
+	<div id="editor"></div><br />
 	<input type="text" id="filename" value="tmp_file.txt" />
 	<input type="button" id="save" value="Save file" />
 	<input type="button" id="open" value="Open file" />
