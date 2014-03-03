@@ -1,5 +1,63 @@
 var editor = undefined;
-var openedFileName = undefined; // make this a list of objects
+
+
+function OpenFileHandler() {
+	var me = this;
+
+	this.activeFile = undefined;
+	this.openFiles = {};
+
+	this.OpenFile = function (content) {
+		var me = this;
+
+		this.content = content;
+
+		this.setContent = function(content) {
+			this.content = content;
+		}
+
+		this.getContent = function() {
+			return this.content;
+		}
+	}
+
+	this.addFile = function(name, content) {
+		me.openFiles[name] = new me.OpenFile(content);
+	}
+
+	this.closeFile = function(name) {
+		delete me.openFiles[name];
+
+		if(me.activeFile == name) {
+			me.activeFile = undefined;
+		}
+	}
+
+	this.setFileContent = function(name, content) {
+		me.openFiles[name].setContent(content);
+	}
+
+	this.getFileContent = function(name) {
+		return me.openFiles[name].getContent();
+	}
+
+	this.placeInEditor = function(name) {
+		// enable syntax highlighting
+		var modelist = ace.require('ace/ext/modelist');
+		var mode = modelist.getModeForPath(name).mode;
+		editor.getSession().setMode(mode);
+
+		// set content
+		editor.setValue(me.getFileContent(name));
+
+		// this file is now active
+		me.activeFile = name;
+	}
+
+	this.getActiveFileName = function() {
+		return me.activeFile;
+	}
+}
 
 function KeyHandler() {
 	var me = this;
@@ -41,6 +99,7 @@ $(document).ready(function() {
 	*/
 
 	var keyHandler = new KeyHandler();
+	var openFileHandler = new OpenFileHandler();
 
 	// handle events
 	Events.on("keypress", function(e) {
@@ -56,20 +115,21 @@ $(document).ready(function() {
 		var filename = PyInterface.show_open_file_dialog("Open file");
 		var content = PyInterface.read_file(filename);
 
-		// enable syntax highlighting
-		var modelist = ace.require('ace/ext/modelist');
-		var mode = modelist.getModeForPath(filename).mode;
-		editor.getSession().setMode(mode);
-
-		// set content
-		editor.setValue(content);
-
-		openedFileName = filename;
+		// add to filehandler
+		openFileHandler.addFile(filename, content);
+		openFileHandler.placeInEditor(filename);
 	});
 	Events.on("saveFile", function(e) {
-		PyInterface.log('Saving file to ' + openedFileName);
+		var fname = openFileHandler.getActiveFileName();
+		var content = editor.getValue();
 
-		PyInterface.save_file(openedFileName, editor.getValue());
+		PyInterface.log('Saving file to ' + fname);
+
+		// update filehandler
+		openFileHandler.setFileContent(fname, content);
+
+		// save to disk
+		PyInterface.save_file(fname, content);
 	});
 
 	// enable editor
