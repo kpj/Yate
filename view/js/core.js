@@ -1,4 +1,6 @@
 var editor = undefined;
+var keyHandler = undefined;
+var openFileHandler = undefined;
 
 
 function OpenFileHandler() {
@@ -23,14 +25,46 @@ function OpenFileHandler() {
 
 	this.addFile = function(name, content) {
 		me.openFiles[name] = new me.OpenFile(content);
+
+		// unmark other files
+		$('#multifile_panel').find('span').each(function(i, val) {
+			$(val).removeClass('open');
+		})
+
+		// add file to multifile panel
+		$('#multifile_panel').append(
+			$('<span>' + getFilename(name) + '</span>')
+			.data('filename', name)
+			.click(function() {
+				me.placeInEditor($(this).data('filename'));
+
+				$('#multifile_panel').find('span').each(function(i, val) {
+					$(val).removeClass('open');
+				})
+
+				$(this).addClass('open', true);
+			})
+			.addClass('open')
+		);
 	}
 
 	this.closeFile = function(name) {
+		// remove from multifile panel
+		$('#multifile_panel').find('span').each(function(i, val) {
+			if($(val).data('filename') == name) {
+				$(val).remove();
+			}
+		})
+
+		// update internal variables
 		delete me.openFiles[name];
 
 		if(me.activeFile == name) {
 			me.activeFile = undefined;
 		}
+
+		// clear editor
+		editor.setValue('');
 	}
 
 	this.setFileContent = function(name, content) {
@@ -89,7 +123,12 @@ function KeyHandler() {
 	}
 
 	this.checkShortcut = function(keyId, shift, ctrl, alt) {
-		console.log(keyId, shift, ctrl, alt);
+		//PyInterface.log(keyId + ' ' + shift + ' ' + ctrl + ' ' + alt);
+
+		if(keyId == 87 && ctrl) {
+			// [ctrl] + [w] -> close current file
+			openFileHandler.closeFile(openFileHandler.getActiveFileName());
+		}
 	}
 }
 
@@ -98,8 +137,8 @@ $(document).ready(function() {
 	* Setup view
 	*/
 
-	var keyHandler = new KeyHandler();
-	var openFileHandler = new OpenFileHandler();
+	keyHandler = new KeyHandler();
+	openFileHandler = new OpenFileHandler();
 
 	// handle events
 	Events.on("keypress", function(e) {
@@ -113,6 +152,10 @@ $(document).ready(function() {
 
 		// load file
 		var filename = PyInterface.show_open_file_dialog("Open file");
+		if(filename.length == 0) {
+			PyInterface.log("No file selected");
+			return;
+		}
 		var content = PyInterface.read_file(filename);
 
 		// add to filehandler
@@ -122,6 +165,11 @@ $(document).ready(function() {
 	Events.on("saveFile", function(e) {
 		var fname = openFileHandler.getActiveFileName();
 		var content = editor.getValue();
+
+		if(typeof fname === "undefined") {
+			PyInterface.log("No file opened");
+			return;
+		}
 
 		PyInterface.log('Saving file to ' + fname);
 
