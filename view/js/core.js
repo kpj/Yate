@@ -195,4 +195,7 @@ $(document).ready(function() {
 	// enable editor
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/monokai");
+
+	// enable sorting of files
+	$('#multifile_panel').sortable();
 });
