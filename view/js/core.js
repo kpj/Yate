@@ -179,6 +179,18 @@ $(document).ready(function() {
 		// save to disk
 		PyInterface.save_file(fname, content);
 	});
+	Events.on("openDirectory", function() {
+		PyInterface.log('Opening directory');
+
+		var dirname = PyInterface.show_open_directory_dialog("Open directory");
+		if(dirname.length == 0) {
+			PyInterface.log("No directory selected");
+			return;
+		}
+		var content = PyInterface.get_directory_content(dirname).split('\n');
+
+		PyInterface.log(content);
+	});
 
 	// enable editor
 	editor = ace.edit("editor");

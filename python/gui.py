@@ -27,6 +27,9 @@ class MainWindow(QtGui.QMainWindow):
 	def openFileAction(self):
 		self.view.evtHandler('openFile', [])
 
+	def openDirectoryAction(self):
+		self.view.evtHandler('openDirectory', [])
+
 	def saveFileAction(self):
 		self.view.evtHandler('saveFile', [])
 
@@ -38,6 +41,11 @@ class MainWindow(QtGui.QMainWindow):
 		openFileAction.setStatusTip('Open new file')
 		openFileAction.triggered.connect(self.openFileAction)
 		actions.append(openFileAction)
+
+		openDirectoryAction = QtGui.QAction('&Open Directory', self)        
+		openDirectoryAction.setStatusTip('Open new directory in tree view')
+		openDirectoryAction.triggered.connect(self.openDirectoryAction)
+		actions.append(openDirectoryAction)
 
 		saveFileAction = QtGui.QAction('&Save', self)        
 		saveFileAction.setShortcut('Ctrl+S')

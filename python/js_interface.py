@@ -1,3 +1,4 @@
+import os
 from PyQt4 import QtCore, QtGui
 
 
@@ -23,6 +24,19 @@ class JavascriptInterface(QtCore.QObject):
 		"""
 		fname = QtGui.QFileDialog.getOpenFileName(None, title, '.')
 		return fname
+
+	@QtCore.pyqtSlot(str, result=str)
+	def show_open_directory_dialog(self, title):
+		"""Asks for dir and returns dir name
+		"""
+		dname = QtGui.QFileDialog.getExistingDirectory(None, title, '.')
+		return dname
+
+	@QtCore.pyqtSlot(str, result=str)
+	def get_directory_content(self, path):
+		"""Returns content of given directory
+		"""
+		return '\n'.join(os.listdir(path))
 
 	@QtCore.pyqtSlot(str, str)
 	def save_file(self, fname, content):
