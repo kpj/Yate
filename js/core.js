@@ -182,6 +182,9 @@ function initEditor() {
 	Events.on("focusout", function() {
 		//saveFile();
 	});
+	Events.on('exitApplication', function(e) {
+		PyInterface.shutdown();
+	});
 
 
 	/*
