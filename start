@@ -1,4 +1,4 @@
 #!/bin/bash
 
 cd WebWrapper
-python3 main.py "../index.html"
+python3 main.py "../index.html" "$@"
