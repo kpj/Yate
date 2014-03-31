@@ -3,6 +3,14 @@ function getFilename(path) {
 	return parts[parts.length - 1];
 }
 
+function loadFile(filename) {
+	var content = PyInterface.read_file(filename);
+
+	// add to filehandler
+	openFileHandler.addFile(filename, content);
+	openFileHandler.placeInEditor(filename);
+}
+
 function saveFile(fname, content) {
 	var fname = openFileHandler.getActiveFileName();
 	var content = editor.getValue();
@@ -19,4 +27,27 @@ function saveFile(fname, content) {
 
 	// save to disk
 	PyInterface.save_file(fname, content);
+}
+
+function dictToDirTree(dirname) {
+	var content = JSON.parse(PyInterface.get_directory_content(dirname));
+	var data = [];
+
+	for(var key in content) {
+		var type = content[key]['type'];
+		if(type == 'file') {
+			data.push({
+				'text': key,
+				'icon': false
+			});
+		} else {
+			data.push({
+				'text': key,
+				'icon': false,
+				'children': dictToDirTree(dirname + '/' + key)
+			});
+		}
+	}
+
+	return data;
 }

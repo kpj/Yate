@@ -10,3 +10,4 @@ Yet Another Text Editor
 * Decrease font size: <kbd>Ctrl</kbd>+<kbd>-</kbd>
 * Edit multiple files at the same time
 * Syntax highlighting
+* Directory browser

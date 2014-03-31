@@ -10,7 +10,6 @@ body {
 #editor {
 	position: relative;
 
-	width: 100%;
 	height: 100%;
 
 	font-size: 15px;
@@ -36,7 +35,11 @@ body {
 }
 
 #dir_tree {
-	background-color: red;
+	background-color: gray;
+
+	float: left;
+
+	height: 100%;
 }
 
 ::-webkit-scrollbar {
