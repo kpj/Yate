@@ -122,12 +122,20 @@ function KeyHandler() {
 		}
 	}
 
-	this.checkShortcut = function(keyId, shift, ctrl, alt) {
+	this.checkShortcut = function(key, shift, ctrl, alt) {
 		//PyInterface.log(keyId + ' ' + shift + ' ' + ctrl + ' ' + alt);
 
-		if(keyId == 87 && ctrl) {
+		if(key == 87 && ctrl) {
 			// [ctrl] + [w] -> close current file
 			openFileHandler.closeFile(openFileHandler.getActiveFileName());
+		} else if(key == 43 && ctrl) {
+			// [ctrl] + [+] -> increase font size
+			if(editor.getFontSize() < 80)
+				editor.setFontSize(editor.getFontSize() + 2);
+		} else if(key == 45 && ctrl) {
+			// [ctrl] + [-] -> decrease font size
+			if(editor.getFontSize() > 5)
+				editor.setFontSize(editor.getFontSize() - 2);
 		}
 	}
 }
