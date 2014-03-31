@@ -1,0 +1,3 @@
+[submodule "WebWrapper"]
+	path = WebWrapper
+	url = git@github.com:kpj/WebWrapper.git

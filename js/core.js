@@ -132,15 +132,17 @@ function KeyHandler() {
 	}
 }
 
-$(document).ready(function() {
+function initEditor() {
 	/*
-	* Setup view
-	*/
-
+	 * Setup view
+	 */
 	keyHandler = new KeyHandler();
 	openFileHandler = new OpenFileHandler();
 
-	// handle events
+
+	/*
+	 * Handle events
+	 */
 	Events.on("keypress", function(e) {
 		keyHandler.checkKey('press', e);
 	});
@@ -163,21 +165,7 @@ $(document).ready(function() {
 		openFileHandler.placeInEditor(filename);
 	});
 	Events.on("saveFile", function(e) {
-		var fname = openFileHandler.getActiveFileName();
-		var content = editor.getValue();
-
-		if(typeof fname === "undefined") {
-			PyInterface.log("No file opened");
-			return;
-		}
-
-		PyInterface.log('Saving file to ' + fname);
-
-		// update filehandler
-		openFileHandler.setFileContent(fname, content);
-
-		// save to disk
-		PyInterface.save_file(fname, content);
+		saveFile();
 	});
 	Events.on("openDirectory", function() {
 		PyInterface.log('Opening directory');
@@ -187,15 +175,65 @@ $(document).ready(function() {
 			PyInterface.log("No directory selected");
 			return;
 		}
-		var content = PyInterface.get_directory_content(dirname).split('\n');
+		var content = JSON.parse(PyInterface.get_directory_content(dirname));
 
 		PyInterface.log(content);
 	});
+	Events.on("focusout", function() {
+		//saveFile();
+	});
 
-	// enable editor
+
+	/*
+	 * Enable editor
+	 */
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/monokai");
 
-	// enable sorting of files
-	$('#multifile_panel').sortable();
-});
+
+	/*
+	 * Enable sorting of files
+	 */
+	//$('#multifile_panel').sortable();
+
+
+	/*
+	 * Setup window/webview
+	 */
+	PyInterface.execute('window', 'setWindowTitle', ['Yate']);
+
+	struct = [
+		{
+			"name": "File",
+			"items": [
+				{
+					"name": "&Open File",
+					"shortcut": "Ctrl+O",
+					"statustip": "Open new file",
+					"trigger": "openFile"
+				},
+				{
+					"name": "&Open Directory",
+					"shortcut": "bla",
+					"statustip": "Open new directory in tree view",
+					"trigger": "openDirectory"
+				},
+				{
+					"name": "&Save",
+					"shortcut": "Ctrl+S",
+					"statustip": "Save current file",
+					"trigger": "saveFile"
+				},
+				{
+					"name": "&Exit",
+					"shortcut": "Ctrl+Q",
+					"statustip": "Exit application",
+					"trigger": "exitApplication"
+				}
+			]
+		}
+	];
+	PyInterface.create_menu(JSON.stringify(struct));
+
+	PyInterface.execute('window', 'show', []);
+};

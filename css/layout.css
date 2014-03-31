@@ -35,6 +35,10 @@ body {
 	background-color: rgb(160, 160, 160) !important;
 }
 
+#dir_tree {
+	background-color: red;
+}
+
 ::-webkit-scrollbar {
 	width: 6px;
 }
