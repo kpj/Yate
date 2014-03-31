@@ -200,6 +200,7 @@ function initEditor() {
 	 */
 	editor = ace.edit("editor");
 	editor.setTheme("ace/theme/monokai");
+	editor.setFontSize(12);
 
 
 	/*
