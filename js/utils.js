@@ -38,13 +38,19 @@ function dictToDirTree(dirname) {
 		if(type == 'file') {
 			data.push({
 				'text': key,
-				'icon': false
+				'icon': false,
+				'data': {
+					'type': type
+				}
 			});
 		} else {
 			data.push({
 				'text': key,
 				'icon': false,
-				'children': dictToDirTree(dirname + '/' + key)
+				'children': dictToDirTree(dirname + '/' + key),
+				'data': {
+					'type': type
+				}
 			});
 		}
 	}

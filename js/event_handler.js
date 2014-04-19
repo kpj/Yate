@@ -56,7 +56,9 @@ function initEvents() {
 			}
 
 			var filename = dirname + subdir + node;
-			loadFile(filename);
+
+			if(data.node.data.type == 'file')
+				loadFile(filename);
 		});
 	});
 
