@@ -47,9 +47,11 @@ function dictToDirTree(dirname) {
 			data.push({
 				'text': key,
 				'icon': false,
-				'children': dictToDirTree(dirname + '/' + key),
+				'children': ['dummy'],
 				'data': {
-					'type': type
+					'type': type,
+					'loaded': false,
+					'toload': dirname + '/' + key
 				}
 			});
 		}

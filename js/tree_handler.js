@@ -2,7 +2,8 @@ function setupDirTree(dirname) {
 	$('#dir_tree').empty()
 		$('#dir_tree').jstree({
 			'core': {
-				'data': dictToDirTree(dirname)
+				'data': dictToDirTree(dirname),
+				'check_callback' : true,
 			},
 			'plugins': [
 				'sort'
@@ -25,7 +26,27 @@ function setupDirTree(dirname) {
 
 			var filename = dirname + subdir + node;
 
-			if(data.node.data.type == 'file')
+			if(data.node.data.type == 'file') {
 				loadFile(filename);
+			}
+		});
+
+		$('#dir_tree').on("open_node.jstree", function (e, data) {
+			if(!data.node.data.loaded) {
+				var content = dictToDirTree(data.node.data.toload);
+
+				// remove dummy node
+				$('#dir_tree').jstree().delete_node(data.node.children[0]);
+
+				// add new nodes
+				for(var p in content) {
+					$('#dir_tree').jstree().create_node(
+						data.node.id, // parent
+						content[p]
+					);
+				}
+
+				data.node.data.loaded = true;
+			}
 		});
 }
