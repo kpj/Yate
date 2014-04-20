@@ -3,7 +3,10 @@ function setupDirTree(dirname) {
 		$('#dir_tree').jstree({
 			'core': {
 				'data': dictToDirTree(dirname)
-			}
+			},
+			'plugins': [
+				'sort'
+			]
 		});
 
 		$('#dir_tree').on("changed.jstree", function (e, data) {
