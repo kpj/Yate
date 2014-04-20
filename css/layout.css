@@ -40,6 +40,10 @@ body {
 	float: left;
 
 	height: 100%;
+	max-width: 30%;
+	overflow: scroll;
+
+	display: none;
 }
 
 ::-webkit-scrollbar {
